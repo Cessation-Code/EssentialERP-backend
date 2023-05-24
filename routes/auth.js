@@ -1,8 +1,9 @@
-const {createOrganisation} = require('../controller/auth')
+const {createOrganisation, loginOrganisation} = require('../controller/auth')
 const router = require('express').Router()
 
 
-router.post('/register', createOrganisation)
+router.post('/registerOrganisation', createOrganisation)
+router.post('/loginOrganisation', loginOrganisation)
 
 
 module.exports = router

@@ -1,10 +1,11 @@
-const Organisation = require('../models/organisation')
+const { BadRequestError, UnauthenticatedError } = require('../errors')
 const { StatusCodes } = require('http-status-codes')
+const Organisation = require('../models/organisation')
 
 
-const createOrganisation = async(req, res) => {
+const createOrganisation = async (req, res) => {
 
-    try{
+    try {
         const organisation = await Organisation.create({ ...req.body })
         res.status(StatusCodes.CREATED).json({
             organisation: {
@@ -15,46 +16,40 @@ const createOrganisation = async(req, res) => {
                 last_name: organisation.last_name
             },
             message: "created",
-            test: "testing nodemon"
         })
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            error: error,
+            error: "An Error Occured, kindly try again",
         })
-    } 
-    
+    }
+
 }
 
-module.exports = {createOrganisation}
+const loginOrganisation = async (req, res) => {
+    const { email, password } = req.body;
 
+    // check if email exists in db
+    const organisation = await Organisation.findOne({ email })
 
+    if (!organisation) {
+        res.status(StatusCodes.NOT_FOUND).json({
+            message: "Incorrect credentials",
+        })
+    } else {
+        // compare password
+        const isPasswordCorrect = await organisation.comparePassword(password)
+        // console.log(isPasswordCorrect)
+        if (!isPasswordCorrect) {
+            res.status(StatusCodes.NOT_FOUND).json({
+                message: "Incorrect credentials",
+            })
+        } else {
+            res.status(StatusCodes.OK).json({
+                name: organisation.organisation_name,
+                email: organisation.email
+            })
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // try{
-    //     // create instance of organisation model
-    //     const organisation = new Organisation(req.body);
-    
-    //     // Save the organisation to the database
-    //     const savedOrganisation = await organisation.save();
-    
-    //     // Send a sucess response
-    //     return res.status(201).json({
-    //         message: 'Organisation created successfully',
-    //         data: savedOrganisation,
-    //     });
-    // }   catch (error){
-    //     // Handle any errors that occurred
-    //     console.error(error);
-    //     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create organisation' });
-    // }
+module.exports = { createOrganisation, loginOrganisation }
