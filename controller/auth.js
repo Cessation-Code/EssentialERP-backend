@@ -19,7 +19,7 @@ const createOrganisation = async (req, res) => {
         })
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            error: "An Error Occured, kindly try again",
+            message: "An Error Occured, kindly try again",
         })
     }
 
@@ -33,7 +33,7 @@ const loginOrganisation = async (req, res) => {
 
     if (!organisation) {
         res.status(StatusCodes.NOT_FOUND).json({
-            message: "Incorrect credentials",
+            message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
         })
     } else {
         // compare password
@@ -41,7 +41,7 @@ const loginOrganisation = async (req, res) => {
         // console.log(isPasswordCorrect)
         if (!isPasswordCorrect) {
             res.status(StatusCodes.NOT_FOUND).json({
-                message: "Incorrect credentials",
+                message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
             })
         } else {
             res.status(StatusCodes.OK).json({
