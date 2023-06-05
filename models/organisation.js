@@ -25,17 +25,17 @@ const OrganisationSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        required: [true, 'Please provide address'],
+        required: false,
         minlength: 6
     },
     first_name: {
         type: String,
-        required: [true, 'Please provide first name'],
+        required: false,
         minlength:2
     },
     last_name: {
         type: String,
-        required: [true, 'Please provide last name'],
+        required: false,
         minlength:2
     }
 

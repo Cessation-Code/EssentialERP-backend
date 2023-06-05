@@ -4,6 +4,10 @@ const app = express();
 const connectDB = require('./database/connect');
 const port = process.env.PORT;
 const authRouter = require('./routes/auth')
+const errorHandler = require('./middleware/error-handler')
+const timeout = require('connect-timeout');
+
+
 
 
 // extra security packages
@@ -24,14 +28,19 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 app.use(xss());
+app.use(timeout('5000')); // Timeout duration in milliseconds (e.g., 5000 ms = 5 seconds)
 
 
+// routes
 app.use('/api/v1/auth', authRouter)
-
-
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
+
+// error handlers
+app.use(errorHandler)
+
 
 async function run() {
   try {

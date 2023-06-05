@@ -5,7 +5,7 @@ const Organisation = require('../models/organisation')
 
 const createOrganisation = async (req, res) => {
 
-    try {
+    try{
         const organisation = await Organisation.create({ ...req.body })
         res.status(StatusCodes.CREATED).json({
             organisation: {
@@ -17,10 +17,12 @@ const createOrganisation = async (req, res) => {
             },
             message: "created",
         })
-    } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            message: "An Error Occured, kindly try again",
-        })
+    }catch(error){
+        if(error.code == 11000){
+            res.status(StatusCodes.BAD_REQUEST).json({
+                message: 'This email has already been used, login or choose a new one'
+            })
+        }
     }
 
 }
