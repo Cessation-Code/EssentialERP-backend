@@ -4,6 +4,7 @@ const app = express();
 const connectDB = require('./database/connect');
 const port = process.env.PORT;
 const authRouter = require('./routes/auth')
+const organisationRouter = require('./routes/organisation')
 const errorHandler = require('./middleware/error-handler')
 const timeout = require('connect-timeout');
 
@@ -14,7 +15,8 @@ const timeout = require('connect-timeout');
 const helmet = require('helmet')
 const cors = require('cors')
 const xss = require('xss-clean')
-const rateLimiter = require('express-rate-limit')
+const rateLimiter = require('express-rate-limit');
+const organisation = require('./models/organisation');
 
 
 // Packages usage
@@ -33,6 +35,8 @@ app.use(timeout('5000')); // Timeout duration in milliseconds (e.g., 5000 ms = 5
 
 // routes
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/organisation', organisationRouter)
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });

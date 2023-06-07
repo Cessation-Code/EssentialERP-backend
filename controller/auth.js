@@ -47,8 +47,8 @@ const loginOrganisation = async (req, res) => {
             })
         } else {
             res.status(StatusCodes.OK).json({
-                name: organisation.organisation_name,
-                email: organisation.email
+                organisation: organisation,
+                message:"success"
             })
         }
     }
