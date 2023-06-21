@@ -27,6 +27,16 @@ const EmployeeSchema = new mongoose.Schema({
         required: [true, 'Please provide password'],
         minlength: 6
     },
+    phone_number_1: {
+        type: String,
+        required: true,
+        minlength:10
+    },
+    phone_number_2: {
+        type: String,
+        required: true,
+        minlength:10
+    },
     organisation_id: {
         type: ObjectId,
         required: true,
@@ -46,7 +56,7 @@ const EmployeeSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    finances:{
+    finance:{
         type: Boolean,
         required: true,
         default: false

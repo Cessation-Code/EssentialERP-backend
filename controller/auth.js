@@ -68,7 +68,7 @@ const createEmployee = async (req, res) => {
                 tpip: employee.tpip,
                 hr_management: employee.hr_management,
                 inventory: employee.inventory,
-                finances: employee.finances
+                finances: employee.finance
             },
             message: "created",
         })
@@ -114,7 +114,7 @@ const loginEmployee = async (req, res) => {
                     organisation_id: employee.organisation_id,
                     portal_access: employee.portal_access,
                     hr_management: employee.hr_management,
-                    finances: employee.finances,
+                    finances: employee.finance,
                     inventory: employee.inventory,
                     tpip: employee.tpip
                 },
