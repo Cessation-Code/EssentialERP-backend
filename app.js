@@ -6,6 +6,7 @@ const port = process.env.PORT;
 const authRouter = require('./routes/auth')
 const organisationRouter = require('./routes/organisation')
 const employeeRouter = require('./routes/employee')
+const paymentRouter = require('./routes/payment')
 const errorHandler = require('./middleware/error-handler')
 const timeout = require('connect-timeout');
 
@@ -38,6 +39,7 @@ app.use(timeout('5000')); // Timeout duration in milliseconds (e.g., 5000 ms = 5
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/organisation', organisationRouter)
 app.use('/api/v1/employee', employeeRouter)
+app.use('/api/v1/payment', paymentRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
