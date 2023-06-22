@@ -6,6 +6,10 @@ const ExpenseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    organisation_id: {
+        type: String,
+        required: true  
+    },
     amount: {
         type: String,
         required: true
