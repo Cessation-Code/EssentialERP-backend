@@ -64,6 +64,7 @@ const createEmployee = async (req, res) => {
                 first_name: employee.first_name,
                 last_name: employee.last_name,
                 email: employee.email,
+                organisation_id: employee.organisation_id,
                 portal_access: employee.portal_access,
                 tpip: employee.tpip,
                 hr_management: employee.hr_management,
