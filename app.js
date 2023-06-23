@@ -42,7 +42,7 @@ app.use('/api/v1/employee', employeeRouter)
 app.use('/api/v1/payment', paymentRouter)
 
 app.get('/', (req, res) => {
-  res.status(200).send("<h1>Hello World</h1>")
+  res.status(200).send("<h1>Hello World!</h1>")
 });
 
 
