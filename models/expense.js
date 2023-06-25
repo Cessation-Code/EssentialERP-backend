@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 
 const ExpenseSchema = new mongoose.Schema({
-    kf_employee_id: {
-        type: String,
-        required: true
-    },
     organisation_id: {
         type: String,
         required: true  
@@ -19,6 +15,10 @@ const ExpenseSchema = new mongoose.Schema({
     },
     created_at:{
         type: Date,
+        required: true
+    },
+    created_by: {
+        type: String,
         required: true
     }
 
