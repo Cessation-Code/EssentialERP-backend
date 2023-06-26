@@ -8,7 +8,7 @@ const SaleSchema = new mongoose.Schema({
     },
     tpip_id: {
         type: ObjectId,
-        required: true,
+        required: false,
     },
     product_id: {
         type: ObjectId,

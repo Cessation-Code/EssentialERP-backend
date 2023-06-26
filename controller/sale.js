@@ -1,4 +1,5 @@
 const Sale = require('../models/sale')
+const Organisation = require('../models/organisation')
 const { StatusCodes } = require('http-status-codes')
 
 const createSale = async (req, res) => {
@@ -6,7 +7,12 @@ const createSale = async (req, res) => {
     const { organisation_id, tpip_id, product_id, payment_method, number, amount, created_by } = req.body
     const created_at = new Date();
 
-    if (!organisation_id || !tpip_id || !product_id || !payment_method || !number || !amount) {
+    // check if organisation exists
+    const organisation = await Organisation.findOne({ _id: organisation_id }).catch( error => {
+        console.log(error);
+    });
+
+    if (!organisation_id || !product_id || !payment_method || !number || !amount || !organisation) {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: "Bad Request"
         })

@@ -1,4 +1,5 @@
 const Expense = require('../models/expense')
+const Organisation = require('../models/organisation')
 const { StatusCodes } = require('http-status-codes')
 
 const createExpense = async (req, res) => {
@@ -6,7 +7,12 @@ const createExpense = async (req, res) => {
     const { created_by, organisation_id, amount, description } = req.body
     const created_at = new Date();
 
-    if (!created_by || !organisation_id || !amount || !description) {
+    // check if organisation exists
+    const organisation = await Organisation.findOne({ _id: organisation_id }).catch( error => {
+        console.log(error);
+    });
+
+    if (!created_by || !organisation_id || !amount || !description || !organisation) {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: "Bad Request"
         })

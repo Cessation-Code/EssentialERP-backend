@@ -13,6 +13,7 @@ const ProductSchema = new mongoose.Schema ({
     name: {
         type: String,
         required: true,
+        unique: true
     },
     stock: {
         type: Number,
@@ -27,7 +28,7 @@ const ProductSchema = new mongoose.Schema ({
         required: true,
     },
     created_by: {
-        type: Date,
+        type: ObjectId,
         required: true,
     },
     modified_at: {
@@ -35,7 +36,7 @@ const ProductSchema = new mongoose.Schema ({
         required: true,
     },
     modified_by: {
-        type: Date,
+        type: ObjectId,
         required: true,
     }
 })

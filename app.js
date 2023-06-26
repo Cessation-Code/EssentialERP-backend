@@ -7,6 +7,10 @@ const authRouter = require('./routes/auth')
 const organisationRouter = require('./routes/organisation')
 const employeeRouter = require('./routes/employee')
 const paymentRouter = require('./routes/payment')
+const expenseRouter = require('./routes/expense')
+const saleRouter = require('./routes/sale')
+const tpipRouter = require('./routes/tpip')
+const productRouter = require('./routes/product')
 const errorHandler = require('./middleware/error-handler')
 const timeout = require('connect-timeout');
 
@@ -40,6 +44,11 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/organisation', organisationRouter)
 app.use('/api/v1/employee', employeeRouter)
 app.use('/api/v1/payment', paymentRouter)
+app.use('/api/v1/expense', expenseRouter)
+app.use('/api/v1/sale', saleRouter)
+app.use('/api/v1/tpip', tpipRouter)
+app.use('/api/v1/product', productRouter)
+
 
 app.get('/', (req, res) => {
   res.status(200).send("<h1>Hello World!</h1>")
