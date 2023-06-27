@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const { ObjectId } = require('mongodb')
 const mongoose = require('mongoose')
 
 const OrganisationSchema = new mongoose.Schema({
@@ -23,20 +24,13 @@ const OrganisationSchema = new mongoose.Schema({
         required: [true, 'Please provide password'],
         minlength: 6
     },
-    address: {
+    phone_number: {
         type: String,
-        required: false,
-        minlength: 6
+        required: true
     },
-    first_name: {
-        type: String,
-        required: false,
-        minlength:2
-    },
-    last_name: {
-        type: String,
-        required: false,
-        minlength:2
+    admin: {
+        type: ObjectId,
+        required: false
     }
 
 })

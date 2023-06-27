@@ -6,20 +6,36 @@ const Employee = require('../models/employee')
 
 const createOrganisation = async (req, res) => {
 
-    try{
-        const organisation = await Organisation.create({ ...req.body })
+    const { first_name, last_name, email, password, phone_number } = req.body;
+
+    try {
+        const organisation = await Organisation.create({ ...req.body }).catch(error => { console.log(error) })
+        const employee = await Employee.create({
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            password: password,
+            phone_number_1: phone_number,
+            organisation_id: organisation._id,
+            role: "admin",
+            portal_access: true,
+            inventory: true,
+            hr_management: true,
+            finance: true,
+            tpip: true
+        }).catch(error => { console.log(error) })
+        organisation.admin = employee._id
+        await organisation.save()
         res.status(StatusCodes.CREATED).json({
             organisation: {
                 name: organisation.organisation_name,
-                email: organisation.email,
-                address: organisation.address,
-                first_name: organisation.first_name,
-                last_name: organisation.last_name
+                email: organisation.email
             },
-            message: "created",
+            employee: employee.email,
+            message: "created"
         })
-    }catch(error){
-        if(error.code == 11000){
+    } catch (error) {
+        if (error.code == 11000) {
             res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'This email has already been used, login or choose a new one'
             })
@@ -49,7 +65,7 @@ const loginOrganisation = async (req, res) => {
         } else {
             res.status(StatusCodes.OK).json({
                 organisation: organisation,
-                message:"success"
+                message: "success"
             })
         }
     }
@@ -57,7 +73,7 @@ const loginOrganisation = async (req, res) => {
 
 const createEmployee = async (req, res) => {
 
-    try{
+    try {
         const employee = await Employee.create({ ...req.body })
         res.status(StatusCodes.CREATED).json({
             employee: {
@@ -73,12 +89,12 @@ const createEmployee = async (req, res) => {
             },
             message: "created",
         })
-    }catch(error){
-        if(error.code == 11000){
+    } catch (error) {
+        if (error.code == 11000) {
             res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'This email has already been used, choose a new one'
             })
-        }else{
+        } else {
             res.status(StatusCodes.BAD_REQUEST).json({
                 message: error.message
             })
@@ -119,7 +135,7 @@ const loginEmployee = async (req, res) => {
                     inventory: employee.inventory,
                     tpip: employee.tpip
                 },
-                message:"success"
+                message: "success"
             })
         }
     }

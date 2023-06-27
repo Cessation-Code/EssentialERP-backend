@@ -34,11 +34,15 @@ const EmployeeSchema = new mongoose.Schema({
     },
     phone_number_2: {
         type: String,
-        required: true,
+        required: false,
         minlength:10
     },
     organisation_id: {
         type: ObjectId,
+        required: true,
+    },
+    role: {
+        type: String,
         required: true,
     },
     portal_access: {

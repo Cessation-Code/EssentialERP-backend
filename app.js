@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 app.use(xss());
-app.use(timeout('5000')); // Timeout duration in milliseconds (e.g., 5000 ms = 5 seconds)
+app.use(timeout('10000')); // Timeout duration in milliseconds (e.g., 10000 ms = 10 seconds)
 
 
 // routes
