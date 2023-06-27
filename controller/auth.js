@@ -25,13 +25,13 @@ const createOrganisation = async (req, res) => {
             tpip: true
         }).catch(error => { console.log(error) })
         organisation.admin = employee._id
-        await organisation.save()
+        await organisation.save().catch(error => {console.log(error)})
         res.status(StatusCodes.CREATED).json({
             organisation: {
                 name: organisation.organisation_name,
                 email: organisation.email
             },
-            employee: employee.email,
+            employee: employee,
             message: "created"
         })
     } catch (error) {
