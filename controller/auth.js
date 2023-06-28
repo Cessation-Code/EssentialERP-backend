@@ -44,7 +44,7 @@ const createOrganisation = async (req, res) => {
 
 }
 
-const loginOrganisation = async (req, res) => {
+// const loginOrganisation = async (req, res) => {
     const { email, password } = req.body;
 
     // check if email exists in db
@@ -69,7 +69,7 @@ const loginOrganisation = async (req, res) => {
             })
         }
     }
-}
+// }
 
 const createEmployee = async (req, res) => {
 
@@ -103,7 +103,7 @@ const createEmployee = async (req, res) => {
 
 }
 
-const loginEmployee = async (req, res) => {
+const login = async (req, res) => {
 
     const { email, password } = req.body;
 
