@@ -1,4 +1,3 @@
-const { BadRequestError, UnauthenticatedError } = require('../errors')
 const { StatusCodes } = require('http-status-codes')
 const Organisation = require('../models/organisation')
 const Employee = require('../models/employee')
@@ -45,30 +44,30 @@ const createOrganisation = async (req, res) => {
 }
 
 // const loginOrganisation = async (req, res) => {
-    const { email, password } = req.body;
+    // const { email, password } = req.body;
 
     // check if email exists in db
-    const organisation = await Organisation.findOne({ email })
+    // const organisation = await Organisation.findOne({ email })
 
-    if (!organisation) {
-        res.status(StatusCodes.NOT_FOUND).json({
-            message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
-        })
-    } else {
-        // compare password
-        const isPasswordCorrect = await organisation.comparePassword(password)
-        // console.log(isPasswordCorrect)
-        if (!isPasswordCorrect) {
-            res.status(StatusCodes.NOT_FOUND).json({
-                message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
-            })
-        } else {
-            res.status(StatusCodes.OK).json({
-                organisation: organisation,
-                message: "success"
-            })
-        }
-    }
+    // if (!organisation) {
+    //     res.status(StatusCodes.NOT_FOUND).json({
+    //         message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
+    //     })
+    // } else {
+    //     // compare password
+    //     const isPasswordCorrect = await organisation.comparePassword(password)
+    //     // console.log(isPasswordCorrect)
+    //     if (!isPasswordCorrect) {
+    //         res.status(StatusCodes.NOT_FOUND).json({
+    //             message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
+    //         })
+    //     } else {
+    //         res.status(StatusCodes.OK).json({
+    //             organisation: organisation,
+    //             message: "success"
+    //         })
+    //     }
+    // }
 // }
 
 const createEmployee = async (req, res) => {
@@ -144,4 +143,4 @@ const login = async (req, res) => {
 
 
 
-module.exports = { createOrganisation, loginOrganisation, createEmployee, loginEmployee }
+module.exports = { createOrganisation, createEmployee, login }
