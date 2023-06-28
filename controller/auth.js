@@ -9,7 +9,7 @@ const createOrganisation = async (req, res) => {
     const { first_name, last_name, email, password, phone_number } = req.body;
 
     try {
-        const organisation = await Organisation.create({ ...req.body }).catch(error => { console.log(error) })
+        const organisation = await Organisation.create({ ...req.body })
         const employee = await Employee.create({
             first_name: first_name,
             last_name: last_name,
