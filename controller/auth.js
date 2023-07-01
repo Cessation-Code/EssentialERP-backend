@@ -107,9 +107,10 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     // check if email exists in db
-    const employee = await Employee.findOne({ email })
+    const employee = await Employee.findOne({ email }).catch( error => {console.log(error)})
+    const organisation = await Organisation.findOne({_id:employee.organisation_id}).catch( error => {console.log(error)})
 
-    if (!employee) {
+    if (!employee || !organisation) {
         res.status(StatusCodes.NOT_FOUND).json({
             message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
         })
@@ -128,6 +129,7 @@ const login = async (req, res) => {
                     last_name: employee.last_name_name,
                     email: employee.email,
                     organisation_id: employee.organisation_id,
+                    organisation_name: organisation.name,
                     portal_access: employee.portal_access,
                     hr_management: employee.hr_management,
                     finances: employee.finance,
