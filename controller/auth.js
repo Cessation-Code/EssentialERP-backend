@@ -8,7 +8,7 @@ const createOrganisation = async (req, res) => {
     const { first_name, last_name, email, password, phone_number } = req.body;
 
     try {
-        const organisation = await Organisation.create({ ...req.body })
+        const organisation = await Organisation.create({ ...req.body }).catch(error => {console.log(error)})
         const employee = await Employee.create({
             first_name: first_name,
             last_name: last_name,
@@ -24,13 +24,17 @@ const createOrganisation = async (req, res) => {
             tpip: true
         }).catch(error => { console.log(error) })
         organisation.admin = employee._id
-        await organisation.save().catch(error => {console.log(error)})
+        await organisation.save().catch(error => { console.log(error) })
         res.status(StatusCodes.CREATED).json({
             organisation: {
                 name: organisation.organisation_name,
                 email: organisation.email
             },
-            employee: employee,
+            employee: {
+                first_name: employee.first_name,
+                last_name: employee.last_name,
+                organisation_name: organisation.organisation_name
+            },
             message: "created"
         })
     } catch (error) {
@@ -42,33 +46,6 @@ const createOrganisation = async (req, res) => {
     }
 
 }
-
-// const loginOrganisation = async (req, res) => {
-    // const { email, password } = req.body;
-
-    // check if email exists in db
-    // const organisation = await Organisation.findOne({ email })
-
-    // if (!organisation) {
-    //     res.status(StatusCodes.NOT_FOUND).json({
-    //         message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
-    //     })
-    // } else {
-    //     // compare password
-    //     const isPasswordCorrect = await organisation.comparePassword(password)
-    //     // console.log(isPasswordCorrect)
-    //     if (!isPasswordCorrect) {
-    //         res.status(StatusCodes.NOT_FOUND).json({
-    //             message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
-    //         })
-    //     } else {
-    //         res.status(StatusCodes.OK).json({
-    //             organisation: organisation,
-    //             message: "success"
-    //         })
-    //     }
-    // }
-// }
 
 const createEmployee = async (req, res) => {
 
@@ -107,8 +84,8 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     // check if email exists in db
-    const employee = await Employee.findOne({ email }).catch( error => {console.log(error)})
-    const organisation = await Organisation.findOne({_id:employee.organisation_id}).catch( error => {console.log(error)})
+    const employee = await Employee.findOne({ email }).catch(error => { console.log(error) })
+    const organisation = await Organisation.findOne({ _id: employee.organisation_id }).catch(error => { console.log(error) })
 
     if (!employee || !organisation) {
         res.status(StatusCodes.NOT_FOUND).json({
