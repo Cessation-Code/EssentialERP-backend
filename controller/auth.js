@@ -129,7 +129,7 @@ const login = async (req, res) => {
                     last_name: employee.last_name,
                     email: employee.email,
                     organisation_id: employee.organisation_id,
-                    organisation_name: organisation.name,
+                    organisation_name: organisation.organisation_name,
                     portal_access: employee.portal_access,
                     hr_management: employee.hr_management,
                     finances: employee.finance,
