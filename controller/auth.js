@@ -126,7 +126,7 @@ const login = async (req, res) => {
             res.status(StatusCodes.OK).json({
                 employee: {
                     first_name: employee.first_name,
-                    last_name: employee.last_name_name,
+                    last_name: employee.last_name,
                     email: employee.email,
                     organisation_id: employee.organisation_id,
                     organisation_name: organisation.name,
