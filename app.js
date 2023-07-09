@@ -12,7 +12,9 @@ const saleRouter = require('./routes/sale')
 const tpipRouter = require('./routes/tpip')
 const productRouter = require('./routes/product')
 const errorHandler = require('./middleware/error-handler')
+const authenticateEmployee = require('./middleware/authorization')
 const timeout = require('connect-timeout');
+
 
 
 
@@ -22,8 +24,6 @@ const helmet = require('helmet')
 const cors = require('cors')
 const xss = require('xss-clean')
 const rateLimiter = require('express-rate-limit');
-const organisation = require('./models/organisation');
-
 
 // Packages usage
 app.set('trust proxy', 1);
@@ -42,12 +42,12 @@ app.use(timeout('10000')); // Timeout duration in milliseconds (e.g., 10000 ms =
 // routes
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/organisation', organisationRouter)
-app.use('/api/v1/employee', employeeRouter)
-app.use('/api/v1/payment', paymentRouter)
+app.use('/api/v1/employee', authenticateEmployee, employeeRouter)
 app.use('/api/v1/expense', expenseRouter)
 app.use('/api/v1/sale', saleRouter)
 app.use('/api/v1/tpip', tpipRouter)
 app.use('/api/v1/product', productRouter)
+app.use('/api/v1/payment', paymentRouter)
 
 
 app.get('/', (req, res) => {

@@ -1,6 +1,12 @@
 const Employee = require('../models/employee')
 const { StatusCodes } = require('http-status-codes');
 
+// get employee info
+const getEmployee = async (req,res) => {
+    res.status(StatusCodes.OK).json(req.employee)
+}
+
+
 // do create the various accesses
 const updateEmployee = async (req, res) => {
 
@@ -57,4 +63,4 @@ const updateEmployee = async (req, res) => {
 }
 
 
-module.exports = { updateEmployee }
+module.exports = { updateEmployee, getEmployee }

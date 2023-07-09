@@ -12,12 +12,14 @@ const createExpense = async (req, res) => {
         console.log(error);
     });
 
+    // make sure all none of the request body params are empty
     if (!created_by || !organisation_id || !amount || !description || !organisation) {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: "Bad Request"
         })
     } else {
         try {
+            // create new expense record
             await Expense.create({
                 organisation_id: organisation_id,
                 amount: amount,
