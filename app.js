@@ -14,6 +14,7 @@ const productRouter = require('./routes/product')
 const errorHandler = require('./middleware/error-handler')
 const authenticateEmployee = require('./middleware/authorization')
 const timeout = require('connect-timeout');
+const corsOptions = {  origin: 'http://localhost:3000'};
 
 
 
@@ -34,7 +35,7 @@ app.use(
     }));
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(xss());
 app.use(timeout('10000')); // Timeout duration in milliseconds (e.g., 10000 ms = 10 seconds)
 
