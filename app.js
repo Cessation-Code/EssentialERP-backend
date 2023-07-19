@@ -14,7 +14,8 @@ const productRouter = require('./routes/product')
 const errorHandler = require('./middleware/error-handler')
 const authenticateEmployee = require('./middleware/authorization')
 const timeout = require('connect-timeout');
-const cron = require('node-cron'); 
+const cron = require('node-cron');
+const productController = require('./controller/product');
 
 
 // extra security packages
@@ -57,7 +58,7 @@ app.get('/', (req, res) => {
 app.use(errorHandler)
 
 // cron job
-// cron.schedule('* * * * *', () => {console.log('running a task every minute');});
+cron.schedule('* * * * * *', ()=>{productController.checkStockJob()});
 
 async function run() {
   try {

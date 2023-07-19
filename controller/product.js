@@ -48,4 +48,41 @@ const createProduct = async (req, res) => {
     }
 }
 
-module.exports = { createProduct }
+const checkStockJob = async () => {
+    try{
+        // Fetch organisations
+        const organisationsData = await Organisation.find().catch(error => {console.log(error)});
+        const organisations = Object.values(organisationsData);
+        // console.log(organisations);
+
+        if (!organisations){
+            console.log("No organisations found");
+            return;
+        }else{
+            // Loop through organisations
+            for (const org of organisations){
+                // Fetch products for each organisation
+                const productsData = await Product.find({organisation_id: org._id}).catch(error => {console.log(error)});
+                const products = Object.values(productsData);
+                // console.log(products);
+                if (!products){
+                    console.log(`No products found for ${org.name}`);
+                }
+    
+                // Loop through products
+                for (const product of products){
+                    // Check if stock is less than 10
+                    if (product.stock < 10){
+                        // Send email to organisation
+                        console.log(`Stock for ${product.name} is less than 10`);
+                    }
+                }
+            }
+        }
+
+    }catch (error){
+        console.log(error);
+    }
+}
+
+module.exports = { createProduct, checkStockJob }
