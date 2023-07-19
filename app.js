@@ -42,7 +42,7 @@ app.use(timeout('10000')); // Timeout duration in milliseconds (e.g., 10000 ms =
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/organisation', organisationRouter)
 app.use('/api/v1/employee', authenticateEmployee, employeeRouter)
-app.use('/api/v1/expense', expenseRouter)
+app.use('/api/v1/expense', authenticateEmployee, expenseRouter)
 app.use('/api/v1/sale', saleRouter)
 app.use('/api/v1/tpip', tpipRouter)
 app.use('/api/v1/product', productRouter)

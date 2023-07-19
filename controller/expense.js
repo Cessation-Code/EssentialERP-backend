@@ -40,4 +40,36 @@ const createExpense = async (req, res) => {
     }
 }
 
-module.exports = { createExpense }
+const getExpenses = async (req, res) => {
+
+    const organisation_id = req.employee.organisation_id;
+    
+    // check if organisation exists
+    const organisation = await Organisation.findOne({ _id: organisation_id }).catch( error => {
+        console.log(error);
+    });
+
+    if (!organisation_id || !organisation) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Bad Request"
+        })
+    } else {
+        try {
+            // get all expenses for the organisation
+            const expenses = await Expense.find({ organisation_id: organisation_id }).catch( error => {
+                console.log(error);
+            });
+            res.status(StatusCodes.OK).json({
+                message: "expenses retrieved successfully",
+                expenses: expenses
+            })
+        } catch (error) {
+            res.status(StatusCodes.EXPECTATION_FAILED).json({
+                message: "An error occured please try again"
+            })
+        }
+
+    }
+}
+
+module.exports = { createExpense, getExpenses }
