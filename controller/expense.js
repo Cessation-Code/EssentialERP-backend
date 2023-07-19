@@ -4,7 +4,7 @@ const { StatusCodes } = require('http-status-codes')
 
 const createExpense = async (req, res) => {
 
-    const { created_by, organisation_id, amount, description } = req.body
+    const { created_by, organisation_id, name, amount, description } = req.body
     const created_at = new Date();
 
     // check if organisation exists
@@ -13,7 +13,7 @@ const createExpense = async (req, res) => {
     });
 
     // make sure all none of the request body params are empty
-    if (!created_by || !organisation_id || !amount || !description || !organisation) {
+    if (!created_by || !organisation_id || !name || !amount || !description || !organisation) {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: "Bad Request"
         })
@@ -22,6 +22,7 @@ const createExpense = async (req, res) => {
             // create new expense record
             await Expense.create({
                 organisation_id: organisation_id,
+                name: name,
                 amount: amount,
                 description: description,
                 created_by: created_by,
