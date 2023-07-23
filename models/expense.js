@@ -1,8 +1,9 @@
+const { ObjectId } = require('mongodb')
 const mongoose = require('mongoose')
 
 const ExpenseSchema = new mongoose.Schema({
     organisation_id: {
-        type: String,
+        type: ObjectId,
         required: true  
     },
     name: {
@@ -22,8 +23,16 @@ const ExpenseSchema = new mongoose.Schema({
         required: true
     },
     created_by: {
-        type: String,
+        type: ObjectId,
         required: true
+    },
+    modified_at: {
+        type: Date,
+        required: false
+    },
+    modified_by: {
+        type: ObjectId,
+        required: false
     }
 
 })

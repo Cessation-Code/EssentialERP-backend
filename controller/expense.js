@@ -72,4 +72,60 @@ const getExpenses = async (req, res) => {
     }
 }
 
-module.exports = { createExpense, getExpenses }
+
+const deleteExpense = async (req, res) => {
+    const { _id } = req.body
+
+    // make sure all none of the request body params are empty
+    if (!_id) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Bad Request"
+        })
+    } else {
+        try {
+            // delete expense record
+            await Expense.deleteOne({ _id: _id })
+            res.status(StatusCodes.OK).json({
+                message: "expense deleted successfully"
+            })
+        } catch (error) {
+            res.status(StatusCodes.EXPECTATION_FAILED).json({
+                message: "An error occured please try again"
+            })
+        }
+
+    }
+}
+
+
+const editExpense = async (req, res) => {
+    const { _id , name, amount, description} = req.body
+
+    // make sure all none of the request body params are empty
+    if (!_id || !name || !amount || !description) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Bad Request"
+        })
+    } else {
+        try {
+            await Expense.updateOne({ _id: _id }, {
+                name: name,
+                amount: amount,
+                description: description,
+                modified_at: new Date(),
+                modified_by: req.employee.employee_id
+            })
+            res.status(StatusCodes.OK).json({
+                message: "expense updated successfully"
+            })
+        } catch (error) {
+            res.status(StatusCodes.EXPECTATION_FAILED).json({
+                message: "An error occured please try again"
+            })
+        }
+    }
+}
+
+
+
+module.exports = { createExpense, getExpenses, deleteExpense, editExpense }

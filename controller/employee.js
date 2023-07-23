@@ -62,5 +62,36 @@ const updateEmployee = async (req, res) => {
 
 }
 
+const deleteEmployee = async (req, res) => {
 
-module.exports = { updateEmployee, getEmployee }
+    // save properties of request body as constansts
+    const { employee_id } = req.body;
+
+    // search for employee
+    const employee = await Employee.findOne({ employee_id })
+
+    if (!employee) {
+        res.status(StatusCodes.NOT_FOUND).json({
+            message: "Employee not found",
+        })
+
+    } else {
+
+        try {
+            // delete employee
+            await employee.delete()
+            res.status(StatusCodes.OK).json({
+                message: "Employee deleted successfully",
+            })
+        } catch (error) {
+            res.status(StatusCodes.BAD_REQUEST).json({
+                message: "Bad Request"
+            })
+        }
+
+    }
+
+}
+
+
+module.exports = { updateEmployee, getEmployee, deleteEmployee }
