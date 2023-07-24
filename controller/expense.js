@@ -26,7 +26,9 @@ const createExpense = async (req, res) => {
                 amount: amount,
                 description: description,
                 created_by: created_by,
-                created_at: created_at
+                created_at: created_at,
+                modified_at: created_at,
+                modified_by: created_by
             })
             res.status(StatusCodes.OK).json({
                 message: "expense added successfully"
