@@ -27,7 +27,7 @@ const SaleSchema = new mongoose.Schema({
         required: true,
     },
     created_by: {
-        type: String,
+        type: ObjectId,
         required: true
     },
     created_at: {
