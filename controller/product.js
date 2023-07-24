@@ -98,4 +98,36 @@ const getProducts = async (req, res) => {
     }
 }
 
-module.exports = { createProduct, checkStockJob, getProducts }
+const editProduct = async (req, res) => {
+    const { _id, price, name, stock, description } = req.body
+
+    // make sure all none of the request body params are empty
+    if (!_id || !price || !name || !stock || !description) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Bad Request"
+        })
+    } else {
+        try {
+            // update product record
+            await Product.updateOne({ _id: _id }, {
+                price: price,
+                name: name,
+                stock: stock,
+                description: description,
+                modified_at: new Date(),
+                modified_by: req.employee.employee_id
+            })
+            res.status(StatusCodes.OK).json({
+                message: "product updated successfully"
+            })
+        } catch (error) {
+            res.status(StatusCodes.EXPECTATION_FAILED).json({
+                message: "An error occured please try again"
+            })
+        }
+
+    }
+        
+}
+
+module.exports = { createProduct, checkStockJob, getProducts, editProduct }
