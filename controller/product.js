@@ -4,30 +4,25 @@ const { StatusCodes } = require('http-status-codes')
 
 const createProduct = async (req, res) => {
 
-    const { organisation_id, price, name, stock, description, created_by } = req.body
+    const { price, name, stock, description } = req.body
     const created_at = new Date();
 
-    // check if organisation exists
-    const organisation = await Organisation.findOne({ _id: organisation_id }).catch(error => {
-        console.log(error);
-    });
-
-    if (!organisation_id || !price || !name || !stock || !description || !created_by || !organisation) {
+    if (!price || !name || !stock || !description) {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: "Bad Request"
         })
     } else {
         try {
             await Product.create({
-                organisation_id: organisation_id,
+                organisation_id: req.employee.organisation_id,
                 price: price,
                 name: name,
                 stock: stock,
                 description: description,
                 created_at: created_at,
-                created_by: created_by,
+                created_by: req.employee.employee_id,
                 modified_at: created_at,
-                modified_by: created_by,
+                modified_by: req.employee.employee_id,
 
             })
             res.status(StatusCodes.OK).json({
@@ -49,40 +44,58 @@ const createProduct = async (req, res) => {
 }
 
 const checkStockJob = async () => {
-    try{
+    try {
         // Fetch organisations
-        const organisationsData = await Organisation.find().catch(error => {console.log(error)});
+        const organisationsData = await Organisation.find().catch(error => { console.log(error) });
         const organisations = Object.values(organisationsData);
         // console.log(organisations);
 
-        if (!organisations){
+        if (!organisations) {
             console.log("No organisations found");
             return;
-        }else{
+        } else {
             // Loop through organisations
-            for (const org of organisations){
+            for (const org of organisations) {
                 // Fetch products for each organisation
-                const productsData = await Product.find({organisation_id: org._id}).catch(error => {console.log(error)});
+                const productsData = await Product.find({ organisation_id: org._id }).catch(error => { console.log(error) });
                 const products = Object.values(productsData);
                 // console.log(products);
-                if (!products){
+                if (!products) {
                     console.log(`No products found for ${org.name}`);
                 }
-    
+
                 // Loop through products
-                for (const product of products){
+                for (const product of products) {
                     // Check if stock is less than 10
-                    if (product.stock < 10){
+                    if (product.stock < 10) {
                         // Send email to organisation
                         console.log(`Stock for ${product.name} is less than 10`);
                     }
                 }
             }
         }
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
 }
 
-module.exports = { createProduct, checkStockJob }
+
+const getProducts = async (req, res) => {
+
+    const organisation_id = req.employee.organisation_id;
+
+    try{
+        await Product.find({ organisation_id: organisation_id }).then((products) => {
+            res.status(StatusCodes.OK).json({
+                message: "products fetched successfully",
+                products: products
+            })
+        })
+    }catch(error){
+        res.status(StatusCodes.EXPECTATION_FAILED).json({
+            message: "An error occured please try again"
+        })
+    }
+}
+
+module.exports = { createProduct, checkStockJob, getProducts }

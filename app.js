@@ -45,7 +45,7 @@ app.use('/api/v1/employee', authenticateEmployee, employeeRouter)
 app.use('/api/v1/expense', authenticateEmployee, expenseRouter)
 app.use('/api/v1/sale', saleRouter)
 app.use('/api/v1/tpip', tpipRouter)
-app.use('/api/v1/product', productRouter)
+app.use('/api/v1/product', authenticateEmployee, productRouter)
 app.use('/api/v1/payment', paymentRouter)
 
 
