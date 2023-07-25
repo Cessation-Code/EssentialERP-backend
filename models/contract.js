@@ -23,7 +23,8 @@ const ContractSchema = new mongoose.Schema({
         enum: {
             values: ['Active', 'Inactive'],
             message: '{VALUE} is not supported'
-        }
+        },
+        required: true
     },
     start_date: {
         type: Date,

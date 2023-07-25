@@ -12,7 +12,7 @@ const saleRouter = require('./routes/sale')
 const tpipRouter = require('./routes/tpip')
 const productRouter = require('./routes/product')
 const errorHandler = require('./middleware/error-handler')
-const authenticateEmployee = require('./middleware/authorization')
+const authenticateRequest = require('./middleware/authorization')
 const timeout = require('connect-timeout');
 const cron = require('node-cron');
 const productController = require('./controller/product');
@@ -41,11 +41,11 @@ app.use(timeout('10000')); // Timeout duration in milliseconds (e.g., 10000 ms =
 // routes
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/organisation', organisationRouter)
-app.use('/api/v1/employee', authenticateEmployee, employeeRouter)
-app.use('/api/v1/expense', authenticateEmployee, expenseRouter)
+app.use('/api/v1/employee', authenticateRequest, employeeRouter)
+app.use('/api/v1/expense', authenticateRequest, expenseRouter)
 app.use('/api/v1/sale', saleRouter)
 app.use('/api/v1/tpip', tpipRouter)
-app.use('/api/v1/product', authenticateEmployee, productRouter)
+app.use('/api/v1/product', authenticateRequest, productRouter)
 app.use('/api/v1/payment', paymentRouter)
 
 

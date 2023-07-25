@@ -53,38 +53,6 @@ const createOrganisation = async (req, res) => {
 
 }
 
-const createEmployee = async (req, res) => {
-
-    try {
-        const employee = await Employee.create({ ...req.body })
-        res.status(StatusCodes.CREATED).json({
-            employee: {
-                first_name: employee.first_name,
-                last_name: employee.last_name,
-                email: employee.email,
-                organisation_id: employee.organisation_id,
-                portal_access: employee.portal_access,
-                tpip: employee.tpip,
-                hr_management: employee.hr_management,
-                inventory: employee.inventory,
-                finances: employee.finance
-            },
-            message: "created",
-        })
-    } catch (error) {
-        if (error.code == 11000) {
-            res.status(StatusCodes.BAD_REQUEST).json({
-                message: 'This email has already been used, choose a new one'
-            })
-        } else {
-            res.status(StatusCodes.BAD_REQUEST).json({
-                message: error.message
-            })
-        }
-    }
-
-}
-
 const login = async (req, res) => {
 
     const { email, password } = req.body;
@@ -132,4 +100,4 @@ const login = async (req, res) => {
 
 
 
-module.exports = { createOrganisation, createEmployee, login }
+module.exports = { createOrganisation, login }

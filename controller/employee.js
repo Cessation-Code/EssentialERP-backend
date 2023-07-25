@@ -1,9 +1,82 @@
 const Employee = require('../models/employee')
+const Contract = require('../models/contract')
 const { StatusCodes } = require('http-status-codes');
 
+// create employee
+const createEmployee = async (req, res) => {
+    const { first_name, last_name, email, password, phone_number_1, phone_number_2, role, portal_access, inventory, hr_management, finance, tpip, description, salary, end_date } = req.body;
+    if (!first_name || !last_name || !email || !password || !phone_number_1 || !role || !salary) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Please fill in all fields"
+        })
+    } else {
+        try {
+            const employee = await Employee.create({
+                first_name: first_name,
+                last_name: last_name,
+                email: email,
+                password: password,
+                phone_number_1: phone_number_1,
+                phone_number_2: phone_number_2,
+                organisation_id: req.employee.organisation_id,
+                role: role,
+                portal_access: portal_access,
+                inventory: inventory,
+                hr_management: hr_management,
+                finance: finance,
+                tpip: tpip
+            })
+            const contract = await Contract.create({
+                employee_id: req.employee.employee_id,
+                role: role,
+                description: description,
+                salary: salary,
+                status: "Active",
+                start_date: new Date(),
+                end_date: !end_date ? "" : end_date
+            })
+            res.status(StatusCodes.CREATED).json({
+                employee: {
+                    first_name: employee.first_name,
+                    last_name: employee.last_name,
+                    email: employee.email,
+                    organisation_id: employee.organisation_id,
+                    portal_access: employee.portal_access,
+                    tpip: employee.tpip,
+                    hr_management: employee.hr_management,
+                    inventory: employee.inventory,
+                    finances: employee.finance
+                },
+                contract: {contract},
+                message: "created"
+            })
+        } catch (error) {
+            if (error.code == 11000) {
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    message: 'This email has already been used, choose a new one'
+                })
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    message: error.message
+                })
+            }
+        }
+    }
+}
+
 // get employee info
-const getEmployee = async (req,res) => {
-    res.status(StatusCodes.OK).json(req.employee)
+const getEmployees = async (req, res) => {
+    try {
+        const employees = await Employee.find({ organisation_id: req.employee.organisation_id })
+        res.status(StatusCodes.OK).json({
+            message: "employees retrieved successfully",
+            employees: employees
+        })
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: error.message
+        })
+    }
 }
 
 
@@ -94,4 +167,4 @@ const deleteEmployee = async (req, res) => {
 }
 
 
-module.exports = { updateEmployee, getEmployee, deleteEmployee }
+module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee }

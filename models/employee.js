@@ -23,6 +23,13 @@ const EmployeeSchema = new mongoose.Schema({
         ],
         unique: true
     },
+    status: {
+        type: String,
+        enum: {
+            values: ['Active', 'Inactive'],
+            message: '{VALUE} is not supported'
+        },
+    },
     password: {
         type: String,
         required: [true, 'Please provide password'],
