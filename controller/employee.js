@@ -64,7 +64,23 @@ const createEmployee = async (req, res) => {
     }
 }
 
-// get employee info
+// get EMPLOYEE (SINGLE) info
+const getEmployee = async (req, res) => {
+    try {
+        const employee = await Employee.findOne({ _id: req.employee.employee_id })
+        res.status(StatusCodes.OK).json({
+            message: "employee retrieved successfully",
+            employee: employee
+        })
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: error.message
+        })
+    }
+}
+
+
+// get employees list info
 const getEmployees = async (req, res) => {
     try {
         const employees = await Employee.find({ organisation_id: req.employee.organisation_id })
@@ -167,4 +183,4 @@ const deleteEmployee = async (req, res) => {
 }
 
 
-module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee }
+module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee }
