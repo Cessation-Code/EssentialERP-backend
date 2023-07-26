@@ -84,14 +84,14 @@ const getProducts = async (req, res) => {
 
     const organisation_id = req.employee.organisation_id;
 
-    try{
+    try {
         await Product.find({ organisation_id: organisation_id }).then((products) => {
             res.status(StatusCodes.OK).json({
                 message: "products fetched successfully",
                 products: products
             })
         })
-    }catch(error){
+    } catch (error) {
         res.status(StatusCodes.EXPECTATION_FAILED).json({
             message: "An error occured please try again"
         })
@@ -125,9 +125,31 @@ const editProduct = async (req, res) => {
                 message: "An error occured please try again"
             })
         }
-
     }
-        
 }
 
-module.exports = { createProduct, getProducts, editProduct }
+const deleteProduct = async (req, res) => {
+    const { _id } = req.body
+
+    // make sure all none of the request body params are empty
+    if (!_id) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Bad Request"
+        })
+    } else {
+        try {
+            // delete product record
+            await Product.deleteOne({ _id: _id })
+            res.status(StatusCodes.OK).json({
+                message: "product deleted successfully"
+            })
+        } catch (error) {
+            res.status(StatusCodes.EXPECTATION_FAILED).json({
+                message: "An error occured please try again"
+            })
+        }
+    }
+}
+
+
+module.exports = { createProduct, getProducts, editProduct, deleteProduct }
