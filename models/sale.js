@@ -4,19 +4,19 @@ const mongoose = require('mongoose')
 const SaleSchema = new mongoose.Schema({
     organisation_id: {
         type: ObjectId,
-        required: true
+        required: false
     },
     tpip_id: {
         type: ObjectId,
         required: false,
     },
-    product_id: {
-        type: ObjectId,
+    products: {
+        type: Array,
         required: true,
     },
     payment_method: {
         type: String,
-        required: true,
+        required: false,
     },
     number: {
         type: String,
@@ -28,7 +28,7 @@ const SaleSchema = new mongoose.Schema({
     },
     created_by: {
         type: ObjectId,
-        required: true
+        required: false
     },
     created_at: {
         type: Date,
