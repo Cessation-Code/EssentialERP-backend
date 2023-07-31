@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes')
 const Organisation = require('../models/organisation')
 const Employee = require('../models/employee')
+const TPIP = require('../models/tpip')
 
 const createOrganisation = async (req, res) => {
 
@@ -98,6 +99,68 @@ const login = async (req, res) => {
 
 }
 
+const createTPIP = async (req, res) => {
+    const { email, password, organisation_id, name, created_by } = req.body
+
+    if (!email || !password || !organisation_id || !name || !created_by) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Please fill in all required fields"
+        })
+    } else {
+        try {
+            const tpip = await TPIP.create({
+                email: email,
+                password: password,
+                organisation_id: organisation_id,
+                name: name,
+                created_by: created_by,
+                created_at: new Date()
+            }).catch(error => { console.log(error) })
+            res.status(StatusCodes.CREATED).json({
+                message: "TPIP created successfully",
+                tpip: {
+                    name: tpip.name,
+                    email: tpip.email,
+                    organisation_id: tpip.organisation_id,
+                    created_by: tpip.created_by
+                }
+            })
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong, please try again" })
+        }
+    }
+}
 
 
-module.exports = { createOrganisation, login }
+const generateTpipToken = async (req, res) => {
+
+    const { email, password } = req.body;
+
+    try {
+        const tpip = await TPIP.findOne({ email: email })
+        const isPasswordCorrect = await tpip.comparePasswords(password)
+
+        if (!tpip || !isPasswordCorrect) {
+            res.status(StatusCodes.NOT_FOUND).json({
+                message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
+            })
+        } else {
+            const token = tpip.createJWT()
+            res.status(StatusCodes.OK).json({
+                token,
+                message: "this token is valid for 12 hours, use it for your subsequent requests"
+            })
+
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(StatusCodes.NOT_FOUND).json({
+            message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
+        })
+    }
+
+}
+
+
+
+module.exports = { createOrganisation, login, generateTpipToken, createTPIP }

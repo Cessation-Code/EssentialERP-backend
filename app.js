@@ -13,6 +13,7 @@ const tpipRouter = require('./routes/tpip')
 const productRouter = require('./routes/product')
 const errorHandler = require('./middleware/error-handler')
 const authenticateRequest = require('./middleware/authorization')
+const authenticateTpipRequest = require('./middleware/tpip_authorization')
 const timeout = require('connect-timeout');
 const cron = require('node-cron');
 const productController = require('./controller/product');
@@ -43,8 +44,8 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/organisation', organisationRouter)
 app.use('/api/v1/employee', authenticateRequest, employeeRouter)
 app.use('/api/v1/expense', authenticateRequest, expenseRouter)
-app.use('/api/v1/sale', authenticateRequest ,saleRouter)
-app.use('/api/v1/tpip', tpipRouter)
+app.use('/api/v1/sale', authenticateRequest, saleRouter)
+app.use('/api/v1/tpip', authenticateTpipRequest, tpipRouter)
 app.use('/api/v1/product', authenticateRequest, productRouter)
 app.use('/api/v1/payment', paymentRouter)
 
