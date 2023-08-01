@@ -15,10 +15,9 @@ const tpipSale = async (req, res) => {
     // first check if the stock is enough
     for (let i = 0; i < products.length; i++) {
         const product = products[i]
-        const product_id = product.product_id
         const quantity = product.quantity
 
-        const foundProduct = await Product.findOne({ _id: product_id })
+        const foundProduct = await Product.findOne({ _id: product._id })
         if (!foundProduct) {
             enoughStock = false;
             res.status(StatusCodes.BAD_REQUEST).json({ message: `${product.name} not found in database` })
@@ -36,15 +35,14 @@ const tpipSale = async (req, res) => {
         try {
             for (let i = 0; i < products.length; i++) {
                 const product = products[i]
-                const product_id = product.product_id
                 const quantity = product.quantity
                 // update each product's stock
-                const foundProduct = await Product.findOne({ _id: product_id })
+                const foundProduct = await Product.findOne({ _id: product._id })
                 foundProduct.stock = foundProduct.stock - quantity
                 await foundProduct.save()
             }
             // create sale record
-            await new Sale.create({
+            await Sale.create({
                 organisation_id: req.tpip.organisation_id,
                 tpip_id: req.tpip._id,
                 products: products,

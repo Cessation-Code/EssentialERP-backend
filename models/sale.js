@@ -26,6 +26,10 @@ const SaleSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    description: {
+        type: String,
+        required: false,
+    },
     created_by: {
         type: ObjectId,
         required: false
