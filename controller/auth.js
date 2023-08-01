@@ -2,6 +2,7 @@ const { StatusCodes } = require('http-status-codes')
 const Organisation = require('../models/organisation')
 const Employee = require('../models/employee')
 const TPIP = require('../models/tpip')
+const jwt = require('jsonwebtoken')
 
 const createOrganisation = async (req, res) => {
 
@@ -96,39 +97,6 @@ const login = async (req, res) => {
             })
         }
     }
-
-}
-
-const createTPIP = async (req, res) => {
-    const { email, password, organisation_id, name, created_by } = req.body
-
-    if (!email || !password || !organisation_id || !name || !created_by) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-            message: "Please fill in all required fields"
-        })
-    } else {
-        try {
-            const tpip = await TPIP.create({
-                email: email,
-                password: password,
-                organisation_id: organisation_id,
-                name: name,
-                created_by: created_by,
-                created_at: new Date()
-            }).catch(error => { console.log(error) })
-            res.status(StatusCodes.CREATED).json({
-                message: "TPIP created successfully",
-                tpip: {
-                    name: tpip.name,
-                    email: tpip.email,
-                    organisation_id: tpip.organisation_id,
-                    created_by: tpip.created_by
-                }
-            })
-        } catch (error) {
-            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong, please try again" })
-        }
-    }
 }
 
 
@@ -162,9 +130,9 @@ const generateTpipToken = async (req, res) => {
 }
 
 const deleteTPIP = async (req, res) => {
-    const {_id} = req.body
+    const { _id } = req.body
     try {
-        await TPIP.deleteOne({_id: _id})
+        await TPIP.deleteOne({ _id: _id })
         res.status(StatusCodes.OK).json({ message: "TPIP deleted successfully" })
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong, please try again" })
@@ -173,4 +141,4 @@ const deleteTPIP = async (req, res) => {
 
 
 
-module.exports = { createOrganisation, login, generateTpipToken, createTPIP, deleteTPIP }
+module.exports = { createOrganisation, login, generateTpipToken, deleteTPIP }
