@@ -51,7 +51,19 @@ const getTPIP = async (req, res) => {
         }
 }
 
+
+const deleteTPIP = async (req, res) => {
+    const { _id } = req.body
+    try {
+        await TPIP.deleteOne({ _id: _id })
+        res.status(StatusCodes.OK).json({ message: "TPIP deleted successfully" })
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong, please try again" })
+    }
+}
+
 module.exports = {
     createTPIP,
-    getTPIP
+    getTPIP,
+    deleteTPIP
 }
