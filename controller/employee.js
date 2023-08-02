@@ -1,5 +1,6 @@
 const Employee = require('../models/employee')
 const Contract = require('../models/contract')
+const Organisation = require('../models/organisation')
 const { StatusCodes } = require('http-status-codes');
 
 // create employee
@@ -47,7 +48,7 @@ const createEmployee = async (req, res) => {
                     inventory: employee.inventory,
                     finances: employee.finance
                 },
-                contract: {contract},
+                contract: { contract },
                 message: "created"
             })
         } catch (error) {
@@ -100,7 +101,7 @@ const getEmployees = async (req, res) => {
 const updateEmployee = async (req, res) => {
 
     // save properties of request body as constansts
-    const { _id, first_name, last_name, email, password, phone_number_1, phone_number_2, portal_access, hr_management, inventory, finance, tpip } = req.body;
+    const { _id, first_name, last_name, email, phone_number_1, phone_number_2, portal_access, hr_management, inventory, finance, tpip } = req.body;
 
     // search for employee
     const employee = await Employee.findOne({ _id })
@@ -113,7 +114,7 @@ const updateEmployee = async (req, res) => {
     } else {
 
         // update all fields
-        employee.portal_access = portal_access;
+        employee.portal_access = true;
         employee.hr_management = hr_management;
         employee.inventory = inventory;
         employee.finance = finance;
@@ -121,7 +122,6 @@ const updateEmployee = async (req, res) => {
         employee.first_name = first_name
         employee.last_name = last_name
         employee.email = email
-        employee.password = password
         employee.phone_number_1 = phone_number_1
         employee.phone_number_2 = phone_number_2
 
@@ -133,7 +133,7 @@ const updateEmployee = async (req, res) => {
                     first_name: first_name,
                     last_name: last_name,
                     email: email,
-                    portal_access: portal_access,
+                    portal_access: true,
                     hr_management: hr_management,
                     inventory: inventory,
                     finance: finance,
@@ -145,10 +145,41 @@ const updateEmployee = async (req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({
                 message: "Bad Request"
             })
+            console.log(error)
         }
 
     }
 
+}
+
+const changePassword = async (req, res) => {
+    const { employee_id, password } = req.body;
+    console.log(req.body)
+    if (!employee_id || !password || password.length < 8 || password == null) {
+        res.status(StatusCodes.BAD_REQUEST)
+    } else {
+        const isAdmin = (req.employee.employee_id == employee_id)
+        if (!isAdmin) {
+            try {
+                const employee = await Employee.findOne({ _id: employee_id  })
+                employee.password = password
+                await employee.save()
+                res.status(StatusCodes.OK).json({
+                    message: "Password changed successfully"
+                })
+            } catch (error) {
+                console.log(error)
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        } else {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You are not authorized to perform this action"
+            })
+        }
+
+    }
 }
 
 const deleteEmployee = async (req, res) => {
@@ -183,4 +214,4 @@ const deleteEmployee = async (req, res) => {
 }
 
 
-module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee }
+module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee, changePassword }

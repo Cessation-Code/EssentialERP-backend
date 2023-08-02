@@ -45,7 +45,7 @@ const createSale = async (req, res) => {
                 number: number,
                 amount: amount,
                 description: description,
-                created_by: req.employee_id,
+                created_by: req.employee.employee_id,
                 created_at: new Date()
             })
             res.status(StatusCodes.CREATED).json({ message: 'Sale created' })
