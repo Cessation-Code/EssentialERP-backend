@@ -12,6 +12,7 @@ const saleRouter = require('./routes/sale')
 const tpipRouter = require('./routes/tpip')
 const productRouter = require('./routes/product')
 const authTpipRouter = require('./routes/auth_tpip')
+const contractRouter = require('./routes/contract')
 const errorHandler = require('./middleware/error-handler')
 const authenticateRequest = require('./middleware/authorization')
 const authenticateTpipRequest = require('./middleware/tpip_authorization')
@@ -50,6 +51,7 @@ app.use('/api/v1/tpip', authenticateTpipRequest, tpipRouter)
 app.use('/api/v1/product', authenticateRequest, productRouter)
 app.use('/api/v1/payment', paymentRouter)
 app.use('/api/v1/auth_tpip',authenticateRequest, authTpipRouter)
+app.use('/api/v1/contract', contractRouter)
 
 
 app.get('/', (req, res) => {
