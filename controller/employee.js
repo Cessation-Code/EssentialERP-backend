@@ -236,4 +236,19 @@ const getDashboardData = async (req, res) => {
 
 }
 
-module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee, changePassword, getDashboardData }
+const getFinanceInfo = async (req, res) => {  
+    try{
+        const expenses = await Expense.find({ organisation_id: req.employee.organisation_id })
+        const sales = await Sale.find({ organisation_id: req.employee.organisation_id })
+        res.status(StatusCodes.OK).json({
+            expenses: expenses,
+            sales: sales
+        })
+    } catch (error){
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: error.message
+        })
+    }
+  }
+
+module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee, changePassword, getDashboardData, getFinanceInfo }
