@@ -1,6 +1,9 @@
 const Employee = require('../models/employee')
 const Contract = require('../models/contract')
 const Organisation = require('../models/organisation')
+const Sale = require('../models/sale')
+const Product = require('../models/product')
+const Expense = require('../models/expense')
 const { StatusCodes } = require('http-status-codes');
 
 // create employee
@@ -161,7 +164,7 @@ const changePassword = async (req, res) => {
         const isAdmin = (req.employee.employee_id == employee_id)
         if (!isAdmin) {
             try {
-                const employee = await Employee.findOne({ _id: employee_id  })
+                const employee = await Employee.findOne({ _id: employee_id })
                 employee.password = password
                 await employee.save()
                 res.status(StatusCodes.OK).json({
@@ -214,4 +217,23 @@ const deleteEmployee = async (req, res) => {
 }
 
 
-module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee, changePassword }
+const getDashboardData = async (req, res) => {
+
+    try {
+        const expenses = await Expense.find({ organisation_id: req.employee.organisation_id })
+        const sales = await Sale.find({ organisation_id: req.employee.organisation_id })
+        const products = await Product.find({ organisation_id: req.employee.organisation_id })
+        res.status(StatusCodes.OK).json({
+            expenses: expenses,
+            sales: sales,
+            products: products
+        })
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: error.message
+        })
+    }
+
+}
+
+module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee, changePassword, getDashboardData }
