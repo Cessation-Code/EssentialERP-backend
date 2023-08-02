@@ -6,7 +6,7 @@ const createContract = async (req, res) => {
     const { employee_id, type, salary } = req.body;
     const employee = await Employee.findOne({ _id: employee_id })
 
-    if (employee || !type || !salary) {
+    if (!employee || !type || !salary) {
         res.status(StatusCodes.BAD_REQUEST)
     } else {
         try {
@@ -54,7 +54,7 @@ const getContracts = async (req, res) => {
     const employee = await Employee.findOne({ _id: employee_id })
 
 
-    if (employee_id) {
+    if (!employee) {
         res.status(StatusCodes.BAD_REQUEST)
     } else {
         try {
