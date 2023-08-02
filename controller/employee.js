@@ -115,35 +115,28 @@ const updateEmployee = async (req, res) => {
         })
 
     } else {
-
         // update all fields
-        employee.portal_access = true;
-        employee.hr_management = hr_management;
-        employee.inventory = inventory;
-        employee.finance = finance;
-        employee.tpip = tpip;
-        employee.first_name = first_name
-        employee.last_name = last_name
-        employee.email = email
-        employee.phone_number_1 = phone_number_1
-        employee.phone_number_2 = phone_number_2
+        const updateObject = {
+            portal_access: true,
+            hr_management: hr_management,
+            inventory: inventory,
+            finance: finance,
+            tpip: tpip,
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            phone_number_1: phone_number_1,
+            phone_number_2: phone_number_2,
+        };
+
 
         try {
             // save and send successful response
-            await employee.save()
+            await employee.updateOne(updateObject);
             res.status(StatusCodes.OK).json({
-                employee: {
-                    first_name: first_name,
-                    last_name: last_name,
-                    email: email,
-                    portal_access: true,
-                    hr_management: hr_management,
-                    inventory: inventory,
-                    finance: finance,
-                    tpip: tpip
-                },
+                employee: updateObject,
                 message: "Employee updated successfully",
-            })
+            });
         } catch (error) {
             res.status(StatusCodes.BAD_REQUEST).json({
                 message: "Bad Request"
@@ -236,19 +229,19 @@ const getDashboardData = async (req, res) => {
 
 }
 
-const getFinanceInfo = async (req, res) => {  
-    try{
+const getFinanceInfo = async (req, res) => {
+    try {
         const expenses = await Expense.find({ organisation_id: req.employee.organisation_id })
         const sales = await Sale.find({ organisation_id: req.employee.organisation_id })
         res.status(StatusCodes.OK).json({
             expenses: expenses,
             sales: sales
         })
-    } catch (error){
+    } catch (error) {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: error.message
         })
     }
-  }
+}
 
 module.exports = { updateEmployee, getEmployees, deleteEmployee, createEmployee, getEmployee, changePassword, getDashboardData, getFinanceInfo }
