@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
 app.use(errorHandler)
 
 // cron job
-cron.schedule('* * * * * *', ()=>{productController.checkStockJob()});
+// cron.schedule('* * * * * *', ()=>{productController.checkStockJob()});
 
 async function run() {
   try {
