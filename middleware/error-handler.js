@@ -13,34 +13,17 @@ const errorHandlerMiddleware = async (err, req, res, next) => {
     // Duplication Error
     if (err.code === 11000) {
         customError.message = 'key already exists, choose another one'
+        return res.status(customError.statusCode).json(customError)
     }
 
     // Request time-out error
     if (err.name === 'TimeoutError') {
         res.status(408).send('Request Timeout');
+        return res.status(customError.statusCode).json(customError)
     }
 
-    res.status(customError.statusCode).json(customError)
+    next();
+
 }
 
 module.exports = errorHandlerMiddleware
-
-
-
-
-// Casting Error
-
-
-
-
-
-
-
-// Validation Error
-    // if (err.name === 'ValidationError') {
-    //     customError.msg = Object.values(err.errors).map((item) => item.message).join(',')
-    //     customError.statusCode = StatusCodes.BAD_REQUEST
-    // } else if (err.name == 'AxiosError') {
-    //     customError.msg = 'Payment Failed'
-    //     customError.statusCode = StatusCodes.BAD_REQUEST
-    // }
