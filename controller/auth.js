@@ -2,40 +2,36 @@ const { StatusCodes } = require('http-status-codes')
 const Organisation = require('../models/organisation')
 const Employee = require('../models/employee')
 const TPIP = require('../models/tpip')
-const jwt = require('jsonwebtoken')
 
 const createOrganisation = async (req, res) => {
 
     const { first_name, last_name, email, password, phone_number } = req.body;
 
     try {
-        const organisation = await Organisation.create({ ...req.body }).catch(error => { console.log(error) })
+        const organisation = await Organisation.create({ ...req.body });
 
-        const employee = await Employee.create({
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            password: password,
-            phone_number_1: phone_number,
-            organisation_id: organisation._id,
+        const employeeData = {
+            first_name,
+            last_name,
+            email,
+            password,
+            password,
+            organisationId: organisation._id,
             role: "admin",
-            portal_access: true,
+            portalAccess: true,
             inventory: true,
-            hr_management: true,
+            hrManagement: true,
             finance: true,
-            tpip: true
-        }).catch(error => { console.log(error) })
+            tpip: true,
+          };
 
+        const employee = await Employee.create({employeeData});
         const token = employee.createJWT()
 
         organisation.admin = employee._id
+        await organisation.save()
 
-        await organisation.save().catch(error => { console.log(error) })
-        res.status(StatusCodes.CREATED).json({
-            // organisation: {
-            //     name: organisation.organisation_name,
-            //     email: organisation.email
-            // },
+        return res.status(StatusCodes.CREATED).json({
             employee: {
                 first_name: employee.first_name,
                 last_name: employee.last_name,
@@ -46,11 +42,7 @@ const createOrganisation = async (req, res) => {
             message: "created"
         })
     } catch (error) {
-        if (error.code == 11000) {
-            res.status(StatusCodes.BAD_REQUEST).json({
-                message: 'This email has already been used, login or choose a new one'
-            })
-        }
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:"Organisation creation failed"});
     }
 
 }
