@@ -29,7 +29,6 @@ const createSale = async (req, res) => {
             for (let i = 0; i < products.length; i++) {
                 const product = products[i]
                 const quantity = product.quantity
-                // update each product's stock
                 const foundProduct = await Product.findOne({ _id: product._id })
                 foundProduct.stock = foundProduct.stock - quantity
                 await foundProduct.save()
