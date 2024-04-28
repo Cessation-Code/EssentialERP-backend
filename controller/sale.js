@@ -16,14 +16,11 @@ const createSale = async (req, res) => {
         // console.log(foundProduct)
         if (!foundProduct) {
             enoughStock = false;
-            res.status(StatusCodes.BAD_REQUEST).json({ message: `${product.name} not found in database` })
-            console.log('hereeeeeee')
-            break;
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: `${product.name} not found in database` })
         }
         if (foundProduct.stock < quantity) {
             enoughStock = false;
-            res.status(StatusCodes.BAD_REQUEST).json({ message: 'Stock not enough' })
-            break;
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Stock not enough' })
         }
     }
 
@@ -48,10 +45,9 @@ const createSale = async (req, res) => {
                 created_by: req.employee.employee_id,
                 created_at: new Date()
             })
-            res.status(StatusCodes.CREATED).json({ message: 'Sale created' })
+            return res.status(StatusCodes.CREATED).json({ message: 'Sale created' })
         } catch (error) {
-            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message })
-            console.log(error)
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message })
         }
     }
 
@@ -60,9 +56,9 @@ const createSale = async (req, res) => {
 const getSales = async (req, res) => {
     try {
         const sales = await Sale.find({ organisation_id: req.employee.organisation_id })
-        res.status(StatusCodes.OK).json({ sales })
+        return res.status(StatusCodes.OK).json({ sales })
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message })
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message })
         console.log(error)
     }
 }
