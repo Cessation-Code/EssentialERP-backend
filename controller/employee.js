@@ -8,10 +8,10 @@ const { StatusCodes } = require('http-status-codes');
 
 // create employee
 const createEmployee = async (req, res) => {
-    const { first_name, last_name, email, password, phone_number_1, phone_number_2, role, portal_access, inventory, hr_management, finance, tpip, description, salary, end_date } = req.body;
+    const { first_name, last_name, email, password, phone_number_1, phone_number_2, role, portal_access, inventory, hr_management, finance, tpip, description, salary, end_date } = {...req.body};
     if (!first_name || !last_name || !email || !password || !phone_number_1 || !role || !salary) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-            message: "Please fill in all fields"
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Please fill in all required fields"
         })
     } else {
         try {
@@ -39,7 +39,7 @@ const createEmployee = async (req, res) => {
                 start_date: new Date(),
                 end_date: !end_date ? "" : end_date
             })
-            res.status(StatusCodes.CREATED).json({
+            return res.status(StatusCodes.CREATED).json({
                 employee: {
                     first_name: employee.first_name,
                     last_name: employee.last_name,
@@ -56,11 +56,11 @@ const createEmployee = async (req, res) => {
             })
         } catch (error) {
             if (error.code == 11000) {
-                res.status(StatusCodes.BAD_REQUEST).json({
+                return res.status(StatusCodes.BAD_REQUEST).json({
                     message: 'This email has already been used, choose a new one'
                 })
             } else {
-                res.status(StatusCodes.BAD_REQUEST).json({
+                return res.status(StatusCodes.BAD_REQUEST).json({
                     message: error.message
                 })
             }
@@ -68,16 +68,20 @@ const createEmployee = async (req, res) => {
     }
 }
 
-// get EMPLOYEE (SINGLE) info
+/**
+ * Get employee details
+ */
 const getEmployee = async (req, res) => {
     try {
         const employee = await Employee.findOne({ _id: req.employee.employee_id })
-        res.status(StatusCodes.OK).json({
+        const organisation = await Organisation.findOne({ _id: req.employee.organisation_id });
+        return res.status(StatusCodes.OK).json({
             message: "employee retrieved successfully",
-            employee: employee
+            employee: employee,
+            organisation: organisation
         })
     } catch (error) {
-        res.status(StatusCodes.BAD_REQUEST).json({
+        return res.status(StatusCodes.BAD_REQUEST).json({
             message: error.message
         })
     }
