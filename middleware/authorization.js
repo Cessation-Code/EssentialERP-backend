@@ -7,7 +7,7 @@ const auth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer')) {
-        res.status(StatusCodes.UNAUTHORIZED).json({ message: "Authentication Invalid" });
+        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Authentication Invalid" });
 
     } else {
 
@@ -15,7 +15,7 @@ const auth = async (req, res, next) => {
 
         try {
             const payload = jwt.verify(token, process.env.JWT_SECRET);
-            const organisation = await Organisation.findOne({ _id: payload.organisation_id}).catch(error => { console.log(error) });
+            const organisation = await Organisation.findOne({ _id: payload.organisation_id});
             req.employee = {
                 employee_id: payload.employee_id,
                 first_name: payload.first_name,
@@ -26,7 +26,7 @@ const auth = async (req, res, next) => {
             next()
 
         } catch (error) {
-            res.status(StatusCodes.UNAUTHORIZED).json({ message: "Authentication Invalid" })
+            return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Authentication Invalid" })
         }
     }
 

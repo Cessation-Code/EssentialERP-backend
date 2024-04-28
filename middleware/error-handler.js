@@ -18,8 +18,7 @@ const errorHandlerMiddleware = async (err, req, res, next) => {
 
     // Request time-out error
     if (err.name === 'TimeoutError') {
-        res.status(408).send('Request Timeout');
-        return res.status(customError.statusCode).json(customError)
+        return res.status(408).send('Request Timeout');
     }
 
     next();
