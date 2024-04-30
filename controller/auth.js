@@ -59,7 +59,7 @@ const login = async (req, res) => {
     const token = employee.createJWT()
 
     if (!employee || !organisation) {
-        res.status(StatusCodes.NOT_FOUND).json({
+        return res.status(StatusCodes.NOT_FOUND).json({
             message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
         })
     } else {
@@ -67,11 +67,11 @@ const login = async (req, res) => {
         const isPasswordCorrect = await employee.comparePassword(password)
         // console.log(isPasswordCorrect)
         if (!isPasswordCorrect) {
-            res.status(StatusCodes.NOT_FOUND).json({
+            return res.status(StatusCodes.NOT_FOUND).json({
                 message: "Incorrect credentials, kindly try again or sign up if you dont have an account",
             })
         } else {
-            res.status(StatusCodes.OK).json({
+            return res.status(StatusCodes.OK).json({
                 employee: {
                     first_name: employee.first_name,
                     last_name: employee.last_name,
