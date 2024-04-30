@@ -7,13 +7,11 @@ const createSale = async (req, res) => {
     const { products, number, amount, payment_method, description } = req.body;
     let enoughStock = true;
 
-    // first check if the stock is enough
     for (let i = 0; i < products.length; i++) {
         const product = products[i]
         const quantity = product.quantity
 
         const foundProduct = await Product.findOne({ _id: product._id })
-        // console.log(foundProduct)
         if (!foundProduct) {
             enoughStock = false;
             return res.status(StatusCodes.BAD_REQUEST).json({ message: `${product.name} not found in database` })
@@ -58,7 +56,6 @@ const getSales = async (req, res) => {
         return res.status(StatusCodes.OK).json({ sales })
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message })
-        console.log(error)
     }
 }
 
